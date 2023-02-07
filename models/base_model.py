@@ -4,10 +4,12 @@
 It contains the class `BaseModel`
 """
 
+from dataclasses import dataclass
 from uuid import uuid4
 from datetime import datetime
 
 
+@dataclass
 class BaseModel:
     """This is the class `BaseModel`
 
@@ -29,32 +31,17 @@ class BaseModel:
             # the value to set our instance attribute
             # If it is not, we generate the value of our instance attribute
 
-            date_format = "%Y-%m-%dT%H:%M:%S.%f"
-
-            if kwargs["id"]:
-                self.id = kwargs["id"]
-            else:
-                self.id = str(uuid4())
-
-            if kwargs["created_at"]:
-                date_string = kwargs["created_at"]
-                self.created_at = datetime.strptime(date_string, date_format)
-            else:
-                self.created_at = datetime.now()
-
-            if kwargs["updated_at"]:
-                date_string = kwargs["updated_at"]
-                self.updated_at = datetime.strptime(date_string, date_format)
-            else:
-                self.updated_at = datetime.now()
-
+            dict_obj = BaseModel.from_dict(kwargs)
+            for key, value in dict_obj.items():
+                setattr(self, key, value)
         else:
             self.id = str(uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
+        # super().__init__()
 
     def __str__(self):
-        """ Prints out a string representation of the class instance """
+        """Prints out a string representation of the class instance"""
 
         return "[{}] ({}) {}".format(
             self.__class__.__name__, self.id, self.__dict__)
@@ -68,11 +55,30 @@ class BaseModel:
         self.updated_at = datetime.now()
 
     def to_dict(self):
-        """ Returns a `dict` of all key/value pairs of the given instance """
+        """Returns a `dict` of all key/value pairs of the given instance"""
 
-        instance_dict = self.__dict__
-        instance_dict["__class__"] = self.__class__.__name__
-        instance_dict["created_at"] = self.created_at.isoformat()
-        instance_dict["updated_at"] = self.updated_at.isoformat()
+        dict_obj = self.__dict__.copy()
+        dict_obj["__class__"] = self.__class__.__name__
+        dict_obj["created_at"] = self.created_at.isoformat()
+        dict_obj["updated_at"] = self.updated_at.isoformat()
 
-        return instance_dict
+        return dict_obj
+
+    @staticmethod
+    def from_dict(dict_obj):
+        """Converts specific keys in `dict_obj` from `str` to apprioprate obj
+
+        Args:
+            dict_obj (dict): Dictionary of attribute names and values
+        """
+
+        date_format = "%Y-%m-%dT%H:%M:%S.%f"
+        dict_obj.pop("__class__", None)
+
+        dict_obj["created_at"] = datetime.strptime(
+            dict_obj["created_at"], date_format)
+
+        dict_obj["updated_at"] = datetime.strptime(
+            dict_obj["updated_at"], date_format)
+
+        return dict_obj
