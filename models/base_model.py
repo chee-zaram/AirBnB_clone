@@ -7,9 +7,10 @@ It contains the class `BaseModel`
 from dataclasses import dataclass
 from uuid import uuid4
 from datetime import datetime
+from models import storage
 
 
-@dataclass
+@dataclass(unsafe_hash=True)
 class BaseModel:
     """This is the class `BaseModel`
 
@@ -38,6 +39,7 @@ class BaseModel:
             self.id = str(uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
+            storage.new(self)
         # super().__init__()
 
     def __str__(self):
@@ -53,6 +55,7 @@ class BaseModel:
         """
 
         self.updated_at = datetime.now()
+        storage.save()
 
     def to_dict(self):
         """Returns a `dict` of all key/value pairs of the given instance"""
