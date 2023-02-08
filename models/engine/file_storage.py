@@ -37,21 +37,15 @@ class FileStorage:
     def reload(self):
         """Deserializes the JSON file to dictionary of objects if file exists
         """
+        from models.base_model import BaseModel
 
+        classes = {"BaseModel": BaseModel}
         filename = FileStorage.__file_path
 
         try:
             with open(filename, "r") as file:
                 data = json.load(file)
-                FileStorage.__objects = {key: self.classes[value["__class__"]](
+                FileStorage.__objects = {key: classes[value["__class__"]](
                     **value) for key, value in data.items()}
         except FileNotFoundError:
             pass
-
-    @property
-    def classes(self):
-        """Returns a dictionary with all all valid classes as keys and values
-        """
-        from models.base_model import BaseModel
-
-        return {"BaseModel": BaseModel}
