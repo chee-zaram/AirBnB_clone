@@ -39,6 +39,21 @@ class FileStorage:
     def reload(self):
         """Deserializes the JSON file to dictionary of objects if file exists
         """
+
+        filename = FileStorage.__file_path
+
+        try:
+            with open(filename, "r") as file:
+                data = json.load(file)
+                FileStorage.__objects = {key: self.classes[value["__class__"]](
+                    **value) for key, value in data.items()}
+        except FileNotFoundError:
+            pass
+
+    @property
+    def classes(self):
+        """Returns the a dictionary of all classes in the program"""
+
         from models.base_model import BaseModel
         from models.user import User
         from models.state import State
@@ -47,7 +62,7 @@ class FileStorage:
         from models.amenity import Amenity
         from models.review import Review
 
-        classes = {
+        return {
             "BaseModel": BaseModel,
             "User": User,
             "State": State,
@@ -56,13 +71,3 @@ class FileStorage:
             "Amenity": Amenity,
             "Review": Review,
         }
-
-        filename = FileStorage.__file_path
-
-        try:
-            with open(filename, "r") as file:
-                data = json.load(file)
-                FileStorage.__objects = {key: classes[value["__class__"]](
-                    **value) for key, value in data.items()}
-        except FileNotFoundError:
-            pass
