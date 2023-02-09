@@ -2,6 +2,7 @@
 """This is the ``file_storage`` module"""
 
 import json
+from os import path
 
 
 class FileStorage:
@@ -10,7 +11,8 @@ class FileStorage:
     It serializes instances to JSON file, deserializes JSON file to instances
     """
 
-    __file_path = "models/engine/file_database.json"
+    __file_path = path.join(path.dirname(
+        path.realpath(__file__)), "file_database.json")
     __objects = {}
 
     def all(self):
