@@ -10,7 +10,7 @@ class FileStorage:
     It serializes instances to JSON file, deserializes JSON file to instances
     """
 
-    __file_path = "file_database.json"
+    __file_path = "models/engine/file_database.json"
     __objects = {}
 
     def all(self):
