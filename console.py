@@ -162,8 +162,9 @@ class HBNBCommand(cmd.Cmd):
             except ValueError:
                 pass
 
-        setattr(obj, attr_name, attr_value)
-        obj.save()
+        if hasattr(obj, attr_name):
+            setattr(obj, attr_name, attr_value)
+            obj.save()
 
     def help_EOF(self):
         """Prints help for the EOF command"""
