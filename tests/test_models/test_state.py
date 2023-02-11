@@ -6,7 +6,7 @@ from models.state import State
 import uuid
 
 
-class TestStateClass(unittest.TestCase):
+class TestState(unittest.TestCase):
     """This is a class that inherits from `unittest.TestCase`"""
 
     def setUp(self):

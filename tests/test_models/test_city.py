@@ -7,7 +7,7 @@ from datetime import datetime
 from models.city import City
 
 
-class TestBase(unittest.TestCase):
+class TestCity(unittest.TestCase):
     """Test class for unittests.
     It inherits from unittest's ``TestCase``
 

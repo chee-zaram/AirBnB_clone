@@ -7,7 +7,7 @@ from datetime import datetime
 from models.review import Review
 
 
-class TestBase(unittest.TestCase):
+class TestReview(unittest.TestCase):
     """Test class for unittests.
     It inherits from unittest's ``TestCase``
 

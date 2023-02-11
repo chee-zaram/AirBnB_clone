@@ -7,7 +7,7 @@ from datetime import datetime
 from models.amenity import Amenity
 
 
-class TestBase(unittest.TestCase):
+class TestAmenity(unittest.TestCase):
     """Test class for unittests.
     It inherits from unittest's ``TestCase``
 
