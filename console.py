@@ -1,19 +1,168 @@
 #!/usr/bin/python3
 """This is the `console` module
 
-It constains the entry point of the command interpreter
+It contains the entry point of the command interpreter
 """
 
 from models import storage
 import cmd
 import re
+import json
 
 
 class HBNBCommand(cmd.Cmd):
-    """This has methods used for the command interpreter for the console"""
+    """This is the `hbnb` command interpreter which inherits from `cmd.Cmd`
+
+    It serves the purpose of managing the classes and objects used within the
+    `AirBnB_clone` project.
+    This class `HBNBCommand` contains methods used for interpreting commands
+    on the console
+    """
 
     prompt = "(hbnb) "
     __classes = storage.classes
+    __cmds = ["all", "create", "update", "destroy", "show", "count"]
+
+    def precmd(self, line):
+        """Runs before the command line input is evaluated
+
+        It is important for possibly refactoring our command line before
+        returning it to `onecmd` which handles the evaluation of the line
+        """
+
+        match = re.search(r'^(.+)\.(.+)\(', line)
+        if not match:
+            return line
+
+        class_name = match.group(1)
+        if class_name not in HBNBCommand.__classes:
+            return line
+        cmd = match.group(2)
+        if cmd not in HBNBCommand.__cmds:
+            return line
+
+        if cmd == "all" or cmd == "count":
+            return self.handle_all_and_count(line, cmd, class_name)
+
+        if cmd == "show" or cmd == "destroy":
+            return self.handle_show_and_destroy(line, cmd, class_name)
+
+        if cmd != "update":
+            return line
+
+        return self.handle_update(line, cmd, class_name)
+
+        return line
+
+    def handle_all_and_count(self, line, cmd, class_name):
+        """Handles the `all` and `count` extensions in classes
+
+        Args:
+            line (str): Command line
+            cmd (str): Command entered
+            class_name (str): Class name referenced
+
+        Returns:
+            line (str): The original command line, usually returned if an error
+                occured a mismatch was found
+            arg (str): A refactored command line to pass to an existing command
+                or a new line if the extension was `count`
+        """
+
+        match = re.search(r'\(\)', line)
+        if not match:
+            return line
+
+        arg = "{} {}".format(cmd, class_name)
+        if cmd == "count":
+            self.count(arg)
+            arg = "\n"
+
+        return arg
+
+    def handle_show_and_destroy(self, line, cmd, class_name):
+        """Handles the `show` and `destroy` extensions in classes
+
+        Args:
+            line (str): Command line
+            cmd (str): Command entered
+            class_name (str): Class name referenced
+
+        Returns:
+            line (str): The original command line, usually returned if an error
+                occured a mismatch was found
+            arg (str): A refactored command line to pass to an existing command
+        """
+
+        match = re.search(r'\("(.+)"\)', line)
+        if not match:
+            return line
+
+        instance_id = match.group(1)
+        arg = "{} {} {}".format(cmd, class_name, instance_id)
+
+        return arg
+
+    def handle_update(self, line, class_name):
+        """Handles the `update` extension in classes
+
+        Args:
+            line (str): Command line
+            cmd (str): Command entered
+            class_name (str): Class name referenced
+
+        Returns:
+            line (str): The original command line, usually returned if an error
+                occured a mismatch was found
+            arg (str): A refactored command line to pass to an existing command
+                or a new line if `onecmd` executes successfully
+        """
+
+        match_regular = re.search(r'\("(.+)",\s*"(.+)",\s*(.*)\)', line)
+        match_dict = re.search(r'\("(.+)",\s*(\{.+\})\)', line)
+        if not match_regular and not match_dict:
+            return line
+
+        quotes = ["'", '"']
+        if match_regular:
+            instance_id = match_regular.group(1)
+            attr_name = match_regular.group(2)
+            attr_value = match_regular.group(3)
+            if attr_value[0] not in quotes and attr_value[-1] not in quotes:
+                attr_value = '"{}"'.format(attr_value)
+
+            arg = "{} {} {} {} {}".format(
+                cmd, class_name, instance_id, attr_name, attr_value)
+
+            return arg
+
+        if match_dict:
+            instance_id = match_dict.group(1)
+            attr_dict = match_dict.group(2)
+            try:
+                attr_dict = json.loads(attr_dict)
+            except ValueError:
+                return line
+
+            for key, value in attr_dict.items():
+                value = '"{}"'.format(value)
+                arg = "{} {} {} {} {}".format(
+                    cmd, class_name, instance_id, key, value)
+                self.onecmd(arg)
+            arg = "\n"
+
+            return arg
+
+    def count(self, arg):
+        """Prints the number of instances of a class
+
+        Args:
+            arg (str): A refactored version of the original command line
+        """
+
+        args = arg.split()
+        print(len([obj for obj in storage.all().values()
+              if type(obj).__name__ == args[1]]))
 
     def emptyline(self):
         """Method to override the pre-existing `emptyline()`"""
@@ -21,13 +170,11 @@ class HBNBCommand(cmd.Cmd):
 
     def do_EOF(self, arg):
         """Exit the program by typing on EOF"""
-
         print()
         return True
 
     def do_quit(self, arg):
         """Exit the program by typing `quit`"""
-
         return True
 
     def do_create(self, arg):
@@ -119,7 +266,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
 
-        match = re.search(r'"(.*?)"', arg)
+        match = re.search(r'"(.*)"', arg)
         if match:
             attr_val = match.group(1)
 
@@ -155,10 +302,37 @@ class HBNBCommand(cmd.Cmd):
             print("** value missing **")
             return
 
-        attr_value = vet_attr_value_in_update(match, args, attr_val)
-        if hasattr(obj, attr_name):
-            setattr(obj, attr_name, attr_value)
-            obj.save()
+        attr_value = self.vet_attr_value_in_update(match, args, attr_val)
+        # if hasattr(obj, attr_name):
+        setattr(obj, attr_name, attr_value)
+        obj.save()
+
+    def vet_attr_value_in_update(self, match, args, attr_val):
+        """Verify attribute name to set in case of quotations when using update
+
+        Args:
+            match (str): String returned by re
+            args (str): List of arguments split from the command line
+            attr_val (str): Potential value gotten from within the quotations
+
+        Returns:
+            attr_value (str): The final value set
+        """
+
+        if match and args[3][0] == '"':
+            attr_value = attr_val
+        else:
+            attr_value = args[3]
+
+        try:
+            attr_value = int(attr_value)
+        except ValueError:
+            try:
+                attr_value = float(attr_value)
+            except ValueError:
+                pass
+
+        return attr_value
 
     def help_EOF(self):
         """Prints help for the EOF command"""
@@ -203,34 +377,6 @@ class HBNBCommand(cmd.Cmd):
         print("Update the value for a given attribute\nUsage: ", end="")
         print('update <class name> <id> <attribute name> "<attribute value>"')
         print('Example:\n  (hbnb) update City 1234-5678 name "New York"\n')
-
-
-def vet_attr_value_in_update(match, args, attr_val):
-    """Verifies attribute name to set in case of quotations when using update
-
-    Args:
-        match (str): String returned by re
-        args (str): List of arguments split from the command line
-        attr_val (str): Potential value gotten from within the quotations
-
-    Returns:
-        attr_value (str): The final value set
-    """
-
-    if match and args[3][0] == '"':
-        attr_value = attr_val
-    else:
-        attr_value = args[3]
-
-    try:
-        attr_value = int(attr_value)
-    except ValueError:
-        try:
-            attr_value = float(attr_value)
-        except ValueError:
-            pass
-
-    return attr_value
 
 
 if __name__ == "__main__":
