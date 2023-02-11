@@ -5,3 +5,5 @@ __pycache__/
 
 # C extensions
 *.so
+
+models/engine/file_database.json
