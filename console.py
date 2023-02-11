@@ -20,6 +20,9 @@ class HBNBCommand(cmd.Cmd):
     """
 
     prompt = "(hbnb) "
+    intro = "-------------Welcome to hbnb!-------------\n" + \
+            "Enter \"help\" or \"?\" to get started\n"
+
     __classes = storage.classes
     __cmds = ["all", "create", "update", "destroy", "show", "count"]
 
