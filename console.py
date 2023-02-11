@@ -106,7 +106,7 @@ class HBNBCommand(cmd.Cmd):
 
         return arg
 
-    def handle_update(self, line, class_name):
+    def handle_update(self, line, cmd, class_name):
         """Handles the `update` extension in classes
 
         Args:
