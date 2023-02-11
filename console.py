@@ -6,6 +6,7 @@ It constains the entry point of the command interpreter
 
 from models import storage
 import cmd
+import re
 
 
 class HBNBCommand(cmd.Cmd):
@@ -40,7 +41,7 @@ class HBNBCommand(cmd.Cmd):
         if not arg:
             print("** class name missing **")
         elif arg not in HBNBCommand.__classes:
-            print("** class name missing **")
+            print("** class doesn't exist **")
         else:
             new_model = HBNBCommand.__classes[arg]()
             new_model.save()
@@ -114,12 +115,13 @@ class HBNBCommand(cmd.Cmd):
         Usage: update <class name> <id> <attribute name> "<attribute value>"
         """
 
-        # TODO: use regex to extract what is in the double quotes to preserve
-        # multi-word strings
-
         if not arg:
             print("** class name missing **")
             return
+
+        match = re.search(r'"(.*?)"', arg)
+        if match:
+            attr_val = match.group(1)
 
         args = arg.split()
         class_name = args[0]
@@ -153,15 +155,7 @@ class HBNBCommand(cmd.Cmd):
             print("** value missing **")
             return
 
-        attr_value = args[3].strip('"')
-        try:
-            attr_value = int(attr_value)
-        except ValueError:
-            try:
-                attr_value = float(attr_value)
-            except ValueError:
-                pass
-
+        attr_value = vet_attr_value_in_update(match, args, attr_val)
         if hasattr(obj, attr_name):
             setattr(obj, attr_name, attr_value)
             obj.save()
@@ -169,7 +163,7 @@ class HBNBCommand(cmd.Cmd):
     def help_EOF(self):
         """Prints help for the EOF command"""
 
-        print("Exits the program when it receives and EOF signal\n")
+        print("Exits the program when it receives an EOF signal\n")
 
     def help_quit(self):
         """Documentation for the quit command"""
@@ -209,6 +203,34 @@ class HBNBCommand(cmd.Cmd):
         print("Update the value for a given attribute\nUsage: ", end="")
         print('update <class name> <id> <attribute name> "<attribute value>"')
         print('Example:\n  (hbnb) update City 1234-5678 name "New York"\n')
+
+
+def vet_attr_value_in_update(match, args, attr_val):
+    """Verifies attribute name to set in case of quotations when using update
+
+    Args:
+        match (str): String returned by re
+        args (str): List of arguments split from the command line
+        attr_val (str): Potential value gotten from within the quotations
+
+    Returns:
+        attr_value (str): The final value set
+    """
+
+    if match and args[3][0] == '"':
+        attr_value = attr_val
+    else:
+        attr_value = args[3]
+
+    try:
+        attr_value = int(attr_value)
+    except ValueError:
+        try:
+            attr_value = float(attr_value)
+        except ValueError:
+            pass
+
+    return attr_value
 
 
 if __name__ == "__main__":
