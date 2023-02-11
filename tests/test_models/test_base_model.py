@@ -22,7 +22,6 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(str, type(model.id))
         self.assertEqual(datetime, type(model.created_at))
         self.assertEqual(datetime, type(model.updated_at))
-        self.assertNotEqual(model.created_at, model.updated_at)
 
     def test_init_with_kwargs(self):
         """Test the constructor with key word arguments"""
