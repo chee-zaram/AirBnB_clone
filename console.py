@@ -97,7 +97,7 @@ class HBNBCommand(cmd.Cmd):
             arg (str): A refactored command line to pass to an existing command
         """
 
-        match = re.search(r'\("(.+)"\)', line)
+        match = re.search(r'\(["\'](.+)["\']\)', line)
         if not match:
             return line
 
@@ -121,8 +121,9 @@ class HBNBCommand(cmd.Cmd):
                 or a new line if `onecmd` executes successfully
         """
 
-        match_regular = re.search(r'\("(.+)",\s*"(.+)",\s*(.*)\)', line)
-        match_dict = re.search(r'\("(.+)",\s*(\{.+\})\)', line)
+        match_regular = re.search(
+            r'\(["\'](.+)["\'],\s*["\'](.+)["\'],\s*(.*)\)', line)
+        match_dict = re.search(r'\(["\'](.+?)["\'],\s*(\{.+\}?)\)', line)
         if not match_regular and not match_dict:
             return line
 
@@ -139,22 +140,28 @@ class HBNBCommand(cmd.Cmd):
 
             return arg
 
-        if match_dict:
-            instance_id = match_dict.group(1)
-            attr_dict = match_dict.group(2)
+        if not match_dict:
+            return line
+
+        instance_id = match_dict.group(1)
+        attr_dict = match_dict.group(2)
+        try:
+            attr_dict = json.loads(attr_dict)
+        except (ValueError, TypeError):
             try:
+                attr_dict = re.sub("'", '"', attr_dict)
                 attr_dict = json.loads(attr_dict)
-            except ValueError:
+            except (ValueError, TypeError):
                 return line
 
-            for key, value in attr_dict.items():
-                value = '"{}"'.format(value)
-                arg = "{} {} {} {} {}".format(
-                    cmd, class_name, instance_id, key, value)
-                self.onecmd(arg)
-            arg = "\n"
+        for key, value in attr_dict.items():
+            value = '"{}"'.format(value)
+            arg = "{} {} {} {} {}".format(
+                cmd, class_name, instance_id, key, value)
+            self.onecmd(arg)
+        arg = "\n"
 
-            return arg
+        return arg
 
     def count(self, arg):
         """Prints the number of instances of a class
