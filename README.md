@@ -2,8 +2,14 @@
 
 ---
 
+![Last Commit][last_commit-badge]
+[![Contributors][contributors-badge]][contributors]
+[![License][licence-badge]][license]
+
+---
+
 This project is the first stage in an attempt to clone the popular vacation rental platform,
-**AirBnB**.
+[AirBnB](https://airbnb.com).
 The end-goal of the project is to build a full-fledged system for managing vacation rentals,
 including features for users to list their properties, make bookings, and manage their reservations.
 However, for this specific project, we will be attempting to build the console.
@@ -13,12 +19,15 @@ This particular project uses a file storage style database, but will be upgraded
 
 ## Getting Started
 
-Clone this git repository. If you are a Linux user, you could copy and paste the
+Clone this git repository. If you are a GNU/Linux user, you could copy and paste the
 following command to clone and change working directory into the root of this project:
 
 ```sh
 git clone https://github.com/chee-zaram/AirBnB_clone.git && cd AirBnB_clone
 ```
+
+other wise, clone the repository as you'd like and change working directory into
+the root of the project.
 
 ### Command Interpreter
 
@@ -152,11 +161,17 @@ The [AUTHORS](https://github.com/chee-zaram/AirBnB_clone/blob/main/AUTHORS)
 file at the root of the repository lists all individuals who were part of the project
 from conception. They are also listed below as follows:
 
-[Chee-zaram Okeke](github.com/chee-zaram)
+[Chee-zaram Okeke](github.com/chee-zaram) ecokeke21@gmail.com
 
-[Yusuf-R](github.com/Yusuf-R)
+[Yusuf-R](github.com/Yusuf-R) y.abdulwasiu@gmail.com
 
 ## Contributors
 
 This lists all persons who have contributed to the project and can be found in the
 [CONTRIBUTORS](https://github.com/chee-zaram/AirBnB_clone/blob/main/CONTRIBUTORS) file.
+
+[licence-badge]: https://img.shields.io/github/license/chee-zaram/AirBnB_clone
+[license]: https://github.com/chee-zaram/AirBnB_clone/blob/main/LICENSE
+[contributors-badge]: https://img.shields.io/github/contributors/chee-zaram/AirBnB_clone
+[contributors]: https://github.com/chee-zaram/AirBnB_clone/blob/main/CONTRIBUTORS
+[last_commit-badge]: https://img.shields.io/github/last-commit/chee-zaram/AirBnB_clone
