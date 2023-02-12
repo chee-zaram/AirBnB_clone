@@ -307,16 +307,20 @@ class HBNBCommand(cmd.Cmd):
             print("** value missing **")
             return
 
-        attr_value = self.vet_attr_value_in_update(match, args, attr_val)
+        attr_value = self.vet_attr_value_in_update(match, obj, args, attr_val)
         # if hasattr(obj, attr_name):
+        if not attr_value:
+            return
+
         setattr(obj, attr_name, attr_value)
         obj.save()
 
-    def vet_attr_value_in_update(self, match, args, attr_val):
+    def vet_attr_value_in_update(self, match, obj, args, attr_val):
         """Verify attribute name to set in case of quotations when using update
 
         Args:
             match (str): String returned by re
+            obj (obj): The instanc of the class to be updated
             args (str): List of arguments split from the command line
             attr_val (str): Potential value gotten from within the quotations
 
@@ -324,18 +328,30 @@ class HBNBCommand(cmd.Cmd):
             attr_value (str): The final value set
         """
 
+        attr_name = args[2]
         if match and args[3][0] == '"':
             attr_value = attr_val
         else:
             attr_value = args[3]
 
         try:
-            attr_value = int(attr_value)
-        except ValueError:
+            attribute = getattr(obj, attr_name)
             try:
-                attr_value = float(attr_value)
+                attr_type = type(attribute)
+                attr_value = attr_type(attr_value)
             except ValueError:
-                pass
+                print("** {} expects a value of type '{}' **".format(
+                    attr_name, attr_type.__name__))
+                return
+
+        except AttributeError:
+            try:
+                attr_value = int(attr_value)
+            except ValueError:
+                try:
+                    attr_value = float(attr_value)
+                except ValueError:
+                    pass
 
         return attr_value
 
