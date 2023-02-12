@@ -55,8 +55,6 @@ class HBNBCommand(cmd.Cmd):
 
         return self.handle_update(line, cmd, class_name)
 
-        return line
-
     def handle_all_and_count(self, line, cmd, class_name):
         """Handles the `all` and `count` extensions in classes
 
@@ -139,9 +137,6 @@ class HBNBCommand(cmd.Cmd):
                 cmd, class_name, instance_id, attr_name, attr_value)
 
             return arg
-
-        if not match_dict:
-            return line
 
         instance_id = match_dict.group(1)
         attr_dict = match_dict.group(2)
