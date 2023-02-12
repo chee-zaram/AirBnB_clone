@@ -47,8 +47,8 @@ class TestAmenity(unittest.TestCase):
         a2 = Amenity()
         a_attr = getattr(a1, "name")
         self.assertTrue(a_attr == "")
-        a1.name = "Ovy"
-        self.assertEqual(a1.name, "Ovy")
+        a1.name = "Chee-z"
+        self.assertEqual(a1.name, "Chee-z")
         self.assertTrue(type(a2.name) == str)
 
         self.assertTrue(a2.id)
