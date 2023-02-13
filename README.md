@@ -29,13 +29,13 @@ git clone https://github.com/chee-zaram/AirBnB_clone.git && cd AirBnB_clone
 other wise, clone the repository as you'd like and change working directory into
 the root of the project.
 
-### Command Interpreter
+## Command Interpreter
 
 The command interpreter is a command-line interface that allows users to interact
 with the **AirBnB** clone system. It provides a set of commands for managing the various
 aspects of the system, such as creating and managing listings, managing bookings, and so on.
 
-#### Starting the Command Interpreter
+### Starting the Command Interpreter
 
 To start the command interpreter, navigate to the root of the project if not already there
 and run the following command:
@@ -47,7 +47,7 @@ and run the following command:
 This will start the command interpreter and you will be presented with a prompt,
 `(hbnb) `, where you can start entering commands.
 
-#### Using the Command Interpreter
+### Using the Command Interpreter
 
 The command interpreter provides a set of commands for managing the various aspects
 of the **AirBnB** clone system. Some of the available commands include:
