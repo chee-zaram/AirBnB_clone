@@ -26,6 +26,12 @@ class FileStorage:
             obj: An instance of a class
         """
 
+        if not obj:
+            raise TypeError("Instance cannot be None type")
+
+        if not isinstance(obj, self.classes["BaseModel"]):
+            raise TypeError("Object must be an instance of BaseModel")
+
         obj_key = "{}.{}".format(obj.__class__.__name__, obj.id)
         FileStorage.__objects[obj_key] = obj
 
@@ -34,7 +40,8 @@ class FileStorage:
 
         with open(FileStorage.__file_path, "w") as file:
             json.dump({key: obj.to_dict()
-                      for key, obj in FileStorage.__objects.items()}, file)
+                      for key, obj in FileStorage.__objects.items()},
+                      file, indent=2)
 
     def reload(self):
         """Deserializes the JSON file to dictionary of objects if file exists
