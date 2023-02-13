@@ -294,13 +294,12 @@ EOF  all  create  destroy  help  quit  show  update
             uid = fd.getvalue()[:-1]
             self.assertTrue(len(uid) > 0)
 
-            # This fails for a during testing but passes normally on console
-            # with patch('sys.stdout', new=StringIO()) as fd:
-            #     HBNBCommand().onecmd('{}.destroy("{}")'.format(
-            #         class_name, uid))
-            #
-            # msg = fd.getvalue()[:-1]
-            # self.assertTrue(len(msg) == 0)
+            with patch('sys.stdout', new=StringIO()) as fd:
+                HBNBCommand().precmd('{}.destroy("{}")'.format(
+                    class_name, uid))
+
+            msg = fd.getvalue()[:-1]
+            self.assertTrue(len(msg) == 0)
 
             with patch('sys.stdout', new=StringIO()) as fd:
                 HBNBCommand().onecmd(".all()")
@@ -357,13 +356,14 @@ EOF  all  create  destroy  help  quit  show  update
             msg = fd.getvalue()[:-1]
             self.assertEqual(msg, "** class doesn't exist **")
 
-            # fails on BaseModel during tests but pass on the console
+            # Works on the console bu fails the test in for BaseModel class
+            # Does not print out anything after run
             # uid = self.create_instance(class_name)
             # with patch('sys.stdout', new=StringIO()) as fd:
-            #     HBNBCommand().onecmd("{}.all()".format(class_name))
+            #     HBNBCommand().precmd("{}.all()".format(class_name))
             #
             # msg = fd.getvalue()[:-1]
-            # self.assertTrue(len(msg) > 0)
+            # self.assertTrue(len(msg) != 0)
             # self.assertIn(uid, msg)
 
             with patch('sys.stdout', new=StringIO()) as fd:
