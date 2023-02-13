@@ -33,13 +33,15 @@ class HBNBCommand(cmd.Cmd):
         returning it to `onecmd` which handles the evaluation of the line
         """
 
-        match = re.search(r'^(.+)\.(.+)\(', line)
+        line = line.lstrip(" ")
+        match = re.search(r'^([a-zA-Z]+)\.([a-z]+)\(', line)
         if not match:
             return line
 
         class_name = match.group(1)
         if class_name not in HBNBCommand.__classes:
             return line
+
         cmd = match.group(2)
         if cmd not in HBNBCommand.__cmds:
             return line
