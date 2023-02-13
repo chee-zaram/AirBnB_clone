@@ -53,6 +53,19 @@ class TestFileStorage(unittest.TestCase):
         self.assertIn(key, obj.keys())
         self.assertEqual(obj[key], self.base_model)
 
+    def test_new_error(self):
+        """Test for wrong type in `new` method"""
+
+        with self.assertRaises(TypeError) as e:
+            self.f_storage.new("")
+        self.assertEqual(
+            str(e.exception), "Instance cannot be None type")
+
+        with self.assertRaises(TypeError) as e:
+            self.f_storage.new(int)
+        self.assertEqual(
+            str(e.exception), "Object must be an instance of BaseModel")
+
     def test_save(self):
         """Tests the save method"""
 
