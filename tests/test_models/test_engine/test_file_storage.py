@@ -14,19 +14,37 @@ class TestFileStorage(unittest.TestCase):
         """Sets up method for test cases"""
 
         self.f_storage = file_storage.FileStorage()
-        self.f_storage.__objects = {}
+        file_storage.FileStorage._FileStorage__objects = {}
+        self.f_objects = file_storage.FileStorage._FileStorage__objects
         self.base_model = BaseModel()
         self.f_database = os.path.join(os.path.dirname(
             file_storage.__file__), "file_database.json")
 
-    def test_all_method(self):
+    def test_file_path(self):
+        """This test case checks the types of all attributes"""
+
+        self.assertEqual(
+            self.f_database, file_storage.FileStorage._FileStorage__file_path)
+        self.assertTrue(
+            type(file_storage.FileStorage._FileStorage__file_path) is str)
+
+    def test_objects(self):
+        """Tests case for the objects attributes"""
+
+        self.f_storage.reload()
+        self.assertEqual(
+            self.f_objects, file_storage.FileStorage._FileStorage__objects)
+        self.assertTrue(
+            type(file_storage.FileStorage._FileStorage__objects) is dict)
+
+    def test_all(self):
         """Tests the all method"""
 
         self.f_storage.new(self.base_model)
         objs = self.f_storage.all()
         self.assertEqual(objs, self.f_storage.all())
 
-    def test_new_method(self):
+    def test_new(self):
         """Tests the new method"""
 
         self.f_storage.new(self.base_model)
@@ -35,17 +53,17 @@ class TestFileStorage(unittest.TestCase):
         self.assertIn(key, obj.keys())
         self.assertEqual(obj[key], self.base_model)
 
-    def test_save_method(self):
+    def test_save(self):
         """Tests the save method"""
 
         self.f_storage.save()
         self.assertTrue(os.path.exists(self.f_database))
 
-    def test_reload_method(self):
+    def test_reload(self):
         """Tests the reload method"""
 
         self.f_storage.save()
-        self.f_storage.__objects = {}
+        self.f_storage._FileStorage__file_path = {}
         self.f_storage.reload()
         self.assertNotEqual(self.f_storage.all(), {})
 
