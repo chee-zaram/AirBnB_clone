@@ -59,7 +59,7 @@ class FileStorage:
 
     @property
     def classes(self):
-        """Returns the a dictionary of all classes in the program"""
+        """Returns the dictionary of all classes in the program"""
 
         from models.base_model import BaseModel
         from models.user import User

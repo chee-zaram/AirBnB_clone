@@ -1,6 +1,4 @@
-# AirBnB Clone - The Console
-
----
+# AirBnB Clone
 
 ![Last Commit][last_commit-badge]
 [![Contributors][contributors-badge]][contributors]
@@ -17,6 +15,10 @@ However, for this specific project, we will be attempting to build the console.
 This particular project uses a file storage style database, but will be upgraded to use
 [MySQL](https://mysql.com) in the future.
 
+## Dependencies
+
+This application is written in Python, and requires Python 3.8 or later to run correctly.
+
 ## Getting Started
 
 Clone this git repository. If you are a GNU/Linux user, you could copy and paste the
@@ -29,7 +31,7 @@ git clone https://github.com/chee-zaram/AirBnB_clone.git && cd AirBnB_clone
 other wise, clone the repository as you'd like and change working directory into
 the root of the project.
 
-## Command Interpreter
+## Command Interpreter (The Console)
 
 The command interpreter is a command-line interface that allows users to interact
 with the **AirBnB** clone system. It provides a set of commands for managing the various
@@ -121,7 +123,7 @@ Example:
 >
 > to delete the instance of class `Place` with id `1234-5678`
 
-- `update`: `<class_name>.update("<instance_id>", "<attribute_name>", <"attribute_value">)`
+- `update`: `<class_name>.update("<instance_id>", "<attribute_name>", "<attribute_value>")`
 
 Example:
 
@@ -155,15 +157,49 @@ or
 
 for a help doc on a specific command.
 
+## Testing
+
+Unittests for all components of the application are well written and documented, and are contained
+in the directory [tests](https://github.com/chee-zaram/AirBnB_clone/tree/main/tests)
+at the root of the repository.
+
+You can run tests for all components of the application by using the following
+command from the root of the project repository:
+
+```sh
+python3 -m unittest discover tests
+```
+
+Alternatively, you could specify which component to run tests on by using the following format:
+
+```sh
+python3 -m unittest path/to/testfile
+```
+
+where `path/to/testfile` is the relative path to the file containing tests.
+
 ## Authors
 
 The [AUTHORS](https://github.com/chee-zaram/AirBnB_clone/blob/main/AUTHORS)
 file at the root of the repository lists all individuals who were part of the project
-from conception. They are also listed below as follows:
+from conception. Their full names, links, and contact information are listed below:
 
-[Chee-zaram Okeke](github.com/chee-zaram) ecokeke21@gmail.com
-
-[Yusuf-R](github.com/Yusuf-R) y.abdulwasiu@gmail.com
+<details>
+    <summary>Emmanuel Chee-zaram Okeke</summary>
+    <ul>
+    <li><a href="https://www.github.com/chee-zaram">GitHub</a></li>
+    <li><a href="https://www.twitter.com/CheezaramOkeke">Twitter</a></li>
+    <li><a href="https://www.linkedin.com/in/chee-zaram">Linkedin</a></li>
+    <li><a href="mailto:ecokeke21@gmail.com">Gmail</a></li>
+    </ul>
+</details>
+<details>
+    <summary>Abdulwasiu Yusuf Tunde</summary>
+    <ul>
+    <li><a href="https://www.github.com/Yusuf-R">GitHub</a></li>
+    <li><a href="mailto:y.abdulwasiu@gmail.com">Gmail</a></li>
+    </ul>
+</details>
 
 ## Contributors
 
