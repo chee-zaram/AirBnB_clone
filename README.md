@@ -1,4 +1,4 @@
-# AirBnB Clone - The Console
+# AirBnB Clone
 
 ![Last Commit][last_commit-badge]
 [![Contributors][contributors-badge]][contributors]
@@ -31,7 +31,7 @@ git clone https://github.com/chee-zaram/AirBnB_clone.git && cd AirBnB_clone
 other wise, clone the repository as you'd like and change working directory into
 the root of the project.
 
-## Command Interpreter
+## Command Interpreter (The Console)
 
 The command interpreter is a command-line interface that allows users to interact
 with the **AirBnB** clone system. It provides a set of commands for managing the various
