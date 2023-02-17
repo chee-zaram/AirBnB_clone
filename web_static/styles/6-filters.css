@@ -6,7 +6,7 @@
 
 section.filters {
   display: flex;
-  justify-content: space-between;
+  justify-content: start;
   margin: 20px 0;
   color: #fff;
   height: 70px;
@@ -14,7 +14,7 @@ section.filters {
   border: 1px solid #dddddd;
   border-radius: 4px;
   align-items: center;
-  padding-right: 30px;
+  position: relative;
 }
 
 section.filters .locations,
@@ -23,7 +23,6 @@ section.filters .amenities {
   color: #000;
   height: 100%;
   width: 25%;
-  padding: 0px;
 }
 
 section.filters .locations {
@@ -100,10 +99,11 @@ section.filters .search-button {
   width: 20%;
   border: none;
   border-radius: 4px;
-  margin-left: 30px;
   opacity: 1;
   transition: opacity 0.3s ease;
   cursor: pointer;
+  position: absolute;
+  right: 30px;
 }
 
 section.filters .search-button:hover {
