@@ -4,13 +4,18 @@
 [![Contributors][contributors-badge]][contributors]
 [![License][licence-badge]][license]
 
+> ![Console](https://imgur.com/p7zzoSX.png)
+
+> ![Home Top](https://imgur.com/LyrlQ8d.png)
+
 ---
 
 This project is the first stage in an attempt to clone the popular vacation rental platform,
 [AirBnB](https://airbnb.com).
 The end-goal of the project is to build a full-fledged system for managing vacation rentals,
 including features for users to list their properties, make bookings, and manage their reservations.
-However, for this specific project, we will be attempting to build the console.
+However, for this specific project, we will be attempting to build the console as well as
+a static [web page]().
 
 This particular project uses a file storage style database, but will be upgraded to use
 [MySQL](https://mysql.com) in the future.
@@ -156,6 +161,11 @@ or
 ```
 
 for a help doc on a specific command.
+
+## Web Static
+
+Here, the front-end for the console is developed, starting with a static web page
+written in HTML and CSS. Details on this can be found [here]().
 
 ## Testing
 
