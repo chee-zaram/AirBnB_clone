@@ -1,0 +1,111 @@
+/*
+* ===============================
+* Filters
+* ===============================
+*/
+
+section.filters {
+  display: flex;
+  justify-content: start;
+  margin: 20px 0;
+  color: #fff;
+  height: 70px;
+  width: 100%;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  align-items: center;
+  position: relative;
+}
+
+section.filters .locations,
+section.filters .amenities {
+  position: relative;
+  color: #000;
+  height: 100%;
+  width: 25%;
+}
+
+section.filters .locations {
+  border-right: 1px solid #dddddd;
+}
+
+section.filters .locations h3,
+section.filters .amenities h3 {
+  font-weight: 600;
+  font-size: 16px;
+  margin-top: 20px;
+  margin-bottom: 0px;
+  margin-left: 30px;
+  text-align: left;
+}
+
+section.filters .locations h4,
+section.filters .amenities h4 {
+  font-weight: 400;
+  font-size: 14px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-left: 30px;
+  text-align: left;
+}
+
+/*
+* ===============================
+* Filter elements popover
+* ===============================
+*/
+
+ul.popover {
+  background-color: #fafafa;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  display: none;
+  list-style-type: none;
+  margin: 0;
+  padding: 10px;
+  position: relative;
+  top: 15px;
+  width: 92%;
+}
+
+ul.popover li {
+  cursor: pointer;
+  padding: 0;
+  margin: 0 0 10px;
+  list-style-type: none;
+}
+
+ul.popover h2 {
+  font-size: 16px;
+  margin: 0 0 10px;
+}
+
+.locations:hover .popover,
+.amenities:hover .popover {
+  display: block;
+}
+
+/*
+* ===============================
+* Search Button
+* ===============================
+*/
+section.filters .search-button {
+  font-size: 18px;
+  background-color: #ff5a5f;
+  color: #fff;
+  height: 48px;
+  width: 20%;
+  border: none;
+  border-radius: 4px;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
+  position: absolute;
+  right: 30px;
+}
+
+section.filters .search-button:hover {
+  opacity: 0.9;
+}
