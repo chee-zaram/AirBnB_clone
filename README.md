@@ -6,7 +6,9 @@
 
 > ![Console](https://imgur.com/p7zzoSX.png)
 
-> ![Home Top](https://imgur.com/LyrlQ8d.png)
+> ![Home Top](https://imgur.com/KHHVvU6.png)
+
+<!-- > ![Home Top](https://imgur.com/LyrlQ8d.png) -->
 
 ---
 
@@ -215,6 +217,10 @@ from conception. Their full names, links, and contact information are listed bel
 
 This lists all persons who have contributed to the project and can be found in the
 [CONTRIBUTORS](https://github.com/chee-zaram/AirBnB_clone/blob/main/CONTRIBUTORS) file.
+
+## Licensing
+
+This project is licensed under the MIT License. See [LICENSE](https://github.com/chee-zaram/AirBnB_clone/blob/main/LICENSE) for full text.
 
 [licence-badge]: https://img.shields.io/github/license/chee-zaram/AirBnB_clone
 [license]: https://github.com/chee-zaram/AirBnB_clone/blob/main/LICENSE

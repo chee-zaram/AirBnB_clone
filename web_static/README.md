@@ -12,17 +12,33 @@ The [styles](https://github.com/chee-zaram/AirBnB_clone/tree/main/web_static/sty
 Contained within the [images](https://github.com/chee-zaram/AirBnB_clone/tree/main/web_static/images) directory are all logos used.
 
 > The top of the home page
-> ![Home Top](https://imgur.com/LyrlQ8d.png)
+> ![Home Top](https://imgur.com/KHHVvU6.png)
 
 > The bottom of the home page
-> ![Home Bottom](https://imgur.com/dQKc5eI.png)
+> ![Home Bottom](https://imgur.com/oLCF4ym.png)
 
 > Showing the `States` dropdown
-> ![States Dropdown](https://imgur.com/lj3vacB.png)
+> ![States Dropdown](https://imgur.com/BOGlpgC.png)
 
 > Showing the `Amenities` dropdown
-> ![Amenities Dropdown](https://imgur.com/QAG8w0T.png)
+> ![Amenities Dropdown](https://imgur.com/jPsFOYc.png)
 
----
+> Showing `Places` in full view
+> ![Places](https://imgur.com/1InwvES.png)
+
+<!---->
+<!-- > The top of the home page -->
+<!-- > ![Home Top](https://imgur.com/LyrlQ8d.png) -->
+<!---->
+<!-- > The bottom of the home page -->
+<!-- > ![Home Bottom](https://imgur.com/dQKc5eI.png) -->
+<!---->
+<!-- > Showing the `States` dropdown -->
+<!-- > ![States Dropdown](https://imgur.com/lj3vacB.png) -->
+<!---->
+<!-- > Showing the `Amenities` dropdown -->
+<!-- > ![Amenities Dropdown](https://imgur.com/QAG8w0T.png) -->
+
+## <!---->
 
 All files were checked for styling with the [W3C-Validator](https://github.com/holbertonschool/W3C-Validator).
