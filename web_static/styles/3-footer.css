@@ -2,10 +2,12 @@ footer {
   background-color: #fff;
   width: 100%;
   border-top: 1px solid #cccccc;
+  justify-content: center;
+  height: 60px;
 }
 
-footer p {
+.footer-text {
   color: #000;
-  line-height: 60px;
+  line-height: 30px;
   text-align: center;
 }

@@ -9,7 +9,6 @@ header {
   background-image: url("../images/logo.png");
   background-repeat: no-repeat;
   background-position: 20px;
-  background-size: contain;
   height: 100%;
   width: 100%;
 }
