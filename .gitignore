@@ -6,4 +6,8 @@ __pycache__/
 # C extensions
 *.so
 
+# Ignore file database
 models/engine/file_database.json
+
+# Ignore screenshots dir
+screenshots
