@@ -32,9 +32,17 @@ class BaseModel:
             # the value to set our instance attribute
             # If it is not, we generate the value of our instance attribute
 
-            dict_obj = BaseModel.from_dict(kwargs)
-            for key, value in dict_obj.items():
-                setattr(self, key, value)
+            if 'id' not in kwargs:
+                kwargs['id'] = str(uuid4())
+                kwargs['created_at'] = datetime.now()
+                kwargs['updated_at'] = datetime.now()
+                self.__dict__.update(kwargs)
+                storage.new(self)
+            else:
+                dict_obj = BaseModel.from_dict(kwargs)
+                self.__dict__.update(dict_obj)
+                # for key, value in dict_obj.items():
+                #     setattr(self, key, value)
         else:
             self.id = str(uuid4())
             self.created_at = datetime.now()
