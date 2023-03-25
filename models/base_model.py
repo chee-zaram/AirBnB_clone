@@ -8,6 +8,10 @@ from dataclasses import dataclass
 from uuid import uuid4
 from datetime import datetime
 from models import storage
+from sqlalchemy.orm import declarative_base
+from sqlalchemy import Column, String, DateTime
+
+Base = declarative_base()
 
 
 @dataclass(unsafe_hash=True)
@@ -16,6 +20,10 @@ class BaseModel:
 
     It defines all common attributes/methods for other classes
     """
+
+    id = Column(String(60), primary_key=True, nullable=False)
+    created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
+    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
 
     def __init__(self, *args, **kwargs):
         """Runs only once when a new instance is created
@@ -28,27 +36,17 @@ class BaseModel:
         """
 
         if kwargs:
-            # Here, if an attribute name we are interested is in kwargs, we use
-            # the value to set our instance attribute
-            # If it is not, we generate the value of our instance attribute
-
             if 'id' not in kwargs:
                 kwargs['id'] = str(uuid4())
                 kwargs['created_at'] = datetime.now()
                 kwargs['updated_at'] = datetime.now()
                 self.__dict__.update(kwargs)
-                storage.new(self)
             else:
                 dict_obj = BaseModel.from_dict(kwargs)
                 self.__dict__.update(dict_obj)
-                # for key, value in dict_obj.items():
-                #     setattr(self, key, value)
         else:
             self.id = str(uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = datetime.now()
-            storage.new(self)
-        # super().__init__()
+            self.created_at = self.updated_at = datetime.now()
 
     def __str__(self):
         """Prints out a string representation of the class instance"""
@@ -63,17 +61,24 @@ class BaseModel:
         """
 
         self.updated_at = datetime.now()
+        storage.new(self)
         storage.save()
 
     def to_dict(self):
         """Returns a `dict` of all key/value pairs of the given instance"""
 
         dict_obj = self.__dict__.copy()
+        if "_sa_instance_state" in dict_obj:
+            del dict_obj["_sa_instance_state"]
         dict_obj["__class__"] = self.__class__.__name__
         dict_obj["created_at"] = self.created_at.isoformat()
         dict_obj["updated_at"] = self.updated_at.isoformat()
 
         return dict_obj
+
+    def delete(self):
+        """Delete instance from storage."""
+        storage.delete(self)
 
     @staticmethod
     def from_dict(dict_obj):
