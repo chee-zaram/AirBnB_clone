@@ -4,6 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from os import getenv
 from models.base_model import Base
+import inspect
 
 
 class DBStorage:
@@ -28,7 +29,8 @@ class DBStorage:
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
-        """Gets all the instances of a given class or all instances if no class
+        """
+        Gets all the instances of a given class or all instances if no class
         is provided
         """
         from models.engine.file_storage import classes
@@ -44,6 +46,12 @@ class DBStorage:
                 for c in subclasses.values()
                 for obj in self.__session.query(c).all()
             }
+
+        if cls not in subclasses and cls.__name__ not in subclasses:
+            raise TypeError("{} is not a valid class".format(cls))
+
+        if not inspect.isclass(cls):
+            cls = subclasses[cls]
 
         return {
             f"{obj.__class__.__name__}.{obj.id}": obj
