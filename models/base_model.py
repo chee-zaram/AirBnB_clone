@@ -7,7 +7,6 @@ It contains the class `BaseModel`
 from dataclasses import dataclass
 from uuid import uuid4
 from datetime import datetime
-from models import storage
 from sqlalchemy.orm import declarative_base
 from sqlalchemy import Column, String, DateTime
 
@@ -59,6 +58,7 @@ class BaseModel:
 
         This attributes is updated with the current datetime
         """
+        from models import storage
 
         self.updated_at = datetime.now()
         storage.new(self)
@@ -78,6 +78,7 @@ class BaseModel:
 
     def delete(self):
         """Delete instance from storage."""
+        from models import storage
         storage.delete(self)
 
     @staticmethod
