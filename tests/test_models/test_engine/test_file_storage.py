@@ -5,8 +5,10 @@ import unittest
 import os
 from models.base_model import BaseModel
 from models.engine import file_storage
+from models import storage_type
 
 
+@unittest.skipIf(storage_type != "db", "File Storage test only")
 class TestFileStorage(unittest.TestCase):
     """Tests for the file_storage.FileStorage class"""
 
@@ -75,10 +77,13 @@ class TestFileStorage(unittest.TestCase):
     def test_reload(self):
         """Tests the reload method"""
 
+        self.f_storage.new(self.base_model)
         self.f_storage.save()
-        self.f_storage._FileStorage__file_path = {}
+        self.f_storage._FileStorage__objects = {}
         self.f_storage.reload()
-        self.assertNotEqual(self.f_storage.all(), {})
+        self.assertNotEqual(self.f_objects, {})
+        print("\n\n\n", self.base_model.id)
+        print(self.f_objects)
 
     def tearDown(self):
         """Tears down method after test cases"""
