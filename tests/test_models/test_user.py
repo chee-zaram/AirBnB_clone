@@ -4,6 +4,7 @@
 import unittest
 from models.user import User
 from models.base_model import BaseModel
+from models import storage
 
 
 class TestUser(unittest.TestCase):
@@ -51,6 +52,12 @@ class TestUser(unittest.TestCase):
         self.assertIsInstance(self.user, BaseModel)
         self.assertTrue(type(self.user) is User)
         self.assertFalse(type(self.user) is BaseModel)
+
+    @classmethod
+    def tearDownClass(cls):
+        from os import path, remove
+        if path.isfile(storage._FileStorage__file_path):
+            remove(storage._FileStorage__file_path)
 
 
 if __name__ == "__main__":
