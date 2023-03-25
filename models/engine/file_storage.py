@@ -15,9 +15,15 @@ class FileStorage:
         path.realpath(__file__)), "file_database.json")
     __objects = {}
 
-    def all(self):
+    def all(self, cls=None):
         """Returns the dictionary object"""
-        return FileStorage.__objects
+
+        if not cls:
+            return self.__objects
+
+        return {key: obj
+                for key, obj in self.__objects.items()
+                if type(obj) == cls}
 
     def new(self, obj):
         """Sets in the dictionary `obj` with key `<obj class name>.id`
@@ -55,6 +61,27 @@ class FileStorage:
                 FileStorage.__objects = {key: self.classes[value["__class__"]](
                     **value) for key, value in data.items()}
         except FileNotFoundError:
+            pass
+
+    def delete(self, obj=None):
+        """Deletes `obj` from `objects` dictionary
+
+        Arguments:
+            obj (instance): instance of a class to delete
+        """
+        from models.base_model import BaseModel
+
+        if not obj:
+            return
+
+        if not isinstance(obj, BaseModel):
+            raise TypeError(f"{obj} must be an instance of BaseModel")
+
+        try:
+            key = f"{obj.__class__.__name__}.{obj.id}"
+            del FileStorage.__objects[key]
+            FileStorage.save(self)
+        except KeyError:
             pass
 
     @property
