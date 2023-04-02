@@ -12,19 +12,22 @@
 
 ---
 
-This project is the first stage in an attempt to clone the popular vacation rental platform,
+This project is an attempt to clone the popular vacation rental platform,
 [AirBnB](https://airbnb.com).
 The end-goal of the project is to build a full-fledged system for managing vacation rentals,
 including features for users to list their properties, make bookings, and manage their reservations.
-However, for this specific project, we will be attempting to build the console as well as
-a static [web page](https://github.com/chee-zaram/AirBnB_clone/tree/main/web_static).
+This is a work in progress, and the project is still under development.
 
-This particular project uses a file storage style database, but will be upgraded to use
-[MySQL](https://mysql.com) in the future.
+In its current state, it has a [console](https://github.com/chee-zaram/AirBnB_clone/blob/main/console.py),
+a static [web page](https://github.com/chee-zaram/AirBnB_clone/tree/main/web_static),
+a file storage engine, and a database storage engine which uses [MySQL](https://mysql.com).
 
 ## Dependencies
 
-This application is written in Python, and requires Python 3.8 or later to run correctly.
+- Python **>= 3.8** running on Linux, Mac, OpenBSD, Cygwin or WSL
+- MySQL **>= 5.7** running on Linux, Mac, OpenBSD, Cygwin or WSL
+- [SQLAlchemy](https://www.sqlalchemy.org/)
+- [MySQL-python](https://pypi.org/project/MySQL-python/)
 
 ## Getting Started
 
