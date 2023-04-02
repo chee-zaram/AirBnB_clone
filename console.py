@@ -4,7 +4,8 @@
 It contains the entry point of the command interpreter
 """
 
-from models import storage
+from models import storage, storage_type
+from models.engine.file_storage import FileStorage
 import cmd
 import re
 import json
@@ -23,7 +24,7 @@ class HBNBCommand(cmd.Cmd):
     # intro = "-------------Welcome to hbnb!-------------\n" + \
     #         "Enter \"help\" or \"?\" to get started\n"
 
-    __classes = storage.classes
+    __classes = FileStorage().classes
     __cmds = ["all", "create", "update", "destroy", "show", "count"]
     __protected = ["id", "created_at", "updated_at"]
 
