@@ -282,7 +282,11 @@ class HBNBCommand(cmd.Cmd):
             try:
                 obj_dict = storage.all()
                 obj_key = "{}.{}".format(args[0], args[1])
-                del obj_dict[obj_key]
+                obj = obj_dict[obj_key]
+                if storage_type != "db":
+                    del obj_dict[obj_key]
+                else:
+                    storage.delete(obj)
                 storage.save()
             except KeyError:
                 print("** no instance found **")
