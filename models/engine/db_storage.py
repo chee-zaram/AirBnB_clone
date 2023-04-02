@@ -33,9 +33,9 @@ class DBStorage:
         Gets all the instances of a given class or all instances if no class
         is provided
         """
-        from models.engine.file_storage import classes
+        from models.engine.file_storage import FileStorage
 
-        subclasses = classes.copy()
+        subclasses = FileStorage().classes.copy()
         # deleting it because it does not inherit from `Base`
         if subclasses.get("BaseModel"):
             del subclasses["BaseModel"]
