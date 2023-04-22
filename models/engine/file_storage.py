@@ -84,6 +84,10 @@ class FileStorage:
         except KeyError:
             pass
 
+    def close(self):
+        """Calls reload method to serialize JSON objects"""
+        self.reload()
+
     @property
     def classes(self):
         """Returns the dictionary of all classes in the program"""
