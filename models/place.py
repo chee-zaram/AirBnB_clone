@@ -13,12 +13,14 @@ if storage_type == "db":
                           Column('place_id',
                                  String(60),
                                  ForeignKey('places.id',
-                                            ondelete='CASCADE'),
+                                            ondelete='CASCADE',
+                                            onupdate='CASCADE'),
                                  nullable=False),
                           Column('amenity_id',
                                  String(60),
                                  ForeignKey('amenities.id',
-                                            ondelete='CASCADE'),
+                                            ondelete='CASCADE',
+                                            onupdate='CASCADE'),
                                  nullable=False))
 
 
