@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from os import getenv
 from models.base_model import Base
 import inspect
+from models.engine.file_storage import FileStorage
 
 
 class DBStorage:
@@ -12,6 +13,9 @@ class DBStorage:
 
     __engine = None
     __session = None
+    __classes = FileStorage().classes.copy()
+    if __classes.get("BaseModel"):
+        del __classes["BaseModel"]
 
     def __init__(self):
         """Constructor for the storage session"""
@@ -33,25 +37,19 @@ class DBStorage:
         Gets all the instances of a given class or all instances if no class
         is provided
         """
-        from models.engine.file_storage import FileStorage
-
-        subclasses = FileStorage().classes.copy()
-        # deleting it because it does not inherit from `Base`
-        if subclasses.get("BaseModel"):
-            del subclasses["BaseModel"]
 
         if cls is None:
             return {
                 f"{obj.__class__.__name__}.{obj.id}": obj
-                for c in subclasses.values()
+                for c in self.__classes.values()
                 for obj in self.__session.query(c).all()
             }
 
-        if cls not in subclasses and cls.__name__ not in subclasses:
+        if cls not in self.__classes and cls.__name__ not in self.__classes:
             raise TypeError("{} is not a valid class".format(cls))
 
         if not inspect.isclass(cls):
-            cls = subclasses[cls]
+            cls = self.__classes[cls]
 
         return {
             f"{obj.__class__.__name__}.{obj.id}": obj
@@ -100,28 +98,27 @@ class DBStorage:
 
     def get(self, cls, id):
         """Gets an object of type `cls` with given `id` in database storage"""
-        if cls not in self.classes and cls not in self.classes.values():
+        if cls not in self.__classes and cls not in self.__classes.values():
             raise TypeError("{} is not a valid class".format(cls))
 
         if type(id) != str:
             raise TypeError("{} must be a string".format(id))
 
         if type(cls) == str:
-            cls = self.classes[cls]
+            cls = self.__classes[cls]
 
         return next((obj for obj in self.all(cls).values() if obj.id == id),
                     None)
 
     def count(self, cls=None):
         """Gets the number of objects of type `cls` in database storage"""
-
         if cls is None:
             return len(list(self.all().values()))
 
-        if cls not in self.classes and cls not in self.classes.values():
+        if cls not in self.__classes and cls not in self.__classes.values():
             raise TypeError("{} is not a valid class".format(cls))
 
         if type(cls) == str:
-            cls = self.classes[cls]
+            cls = self.__classes[cls]
 
         return len(list(self.all(cls).values()))
