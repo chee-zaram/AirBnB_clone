@@ -20,7 +20,8 @@ This is a work in progress, and the project is still under development.
 
 In its current state, it has a [console](https://github.com/chee-zaram/AirBnB_clone/blob/main/console.py),
 a static [web page](https://github.com/chee-zaram/AirBnB_clone/tree/main/web_static),
-a file storage engine, and a database storage engine which uses [MySQL](https://mysql.com).
+a file storage engine, a database storage engine which uses [MySQL](https://mysql.com), and a [flask
+web application](https://github.com/chee-zaram/AirBnB_clone/tree/main/api) used to implement a REST API.
 
 ## Dependencies
 
@@ -28,6 +29,8 @@ a file storage engine, and a database storage engine which uses [MySQL](https://
 - MySQL **>= 5.7** running on Linux, Mac, OpenBSD, Cygwin or WSL
 - [SQLAlchemy](https://www.sqlalchemy.org/)
 - [MySQL-python](https://pypi.org/project/MySQL-python/)
+- [Flask](https://flask.palletsprojects.com/)
+- [Bcrypt](https://pypi.org/project/bcrypt/)
 
 ## Getting Started
 
@@ -81,7 +84,7 @@ and hit enter.
 For example, to create a new instance of the `User` class, you would run the following command:
 
 ```sh
-(hbnb) create User
+(hbnb) create User email="airbnb.clone@airbnb.com" password="09876airbnb" first_name="John" last_name="Doe"
 ```
 
 To show the details of a specific instance of a class, you would run the following command,
@@ -148,7 +151,7 @@ The `.update` extension also works with a dictionary of attribute name(s) and va
 Example:
 
 > ```sh
-> (hbnb) User.update("1234-5678", {"email": "airbnb.clone@airbnb.com", "password": "09876airbnb"})
+> (hbnb) User.update("1234-5678", {"password": "09876airbnb", "last_name": "Doe"})
 > ```
 >
 > to update the email and password of the user with id `1234-5678`
@@ -172,11 +175,17 @@ for a help doc on a specific command.
 Here, the front-end for the console is developed, starting with a static web page
 written in HTML and CSS. Details on this can be found [here](https://github.com/chee-zaram/AirBnB_clone/tree/main/web_static).
 
+## RESTful API
+
+This is a web application which runs and manages the AirBnB clone API. It is a fully functional
+RESTful API, allowing you to create, read, update, and delete instances of the AirBnB clone. Implementation of
+the API can be found [here](https://github.com/chee-zaram/AirBnB_clone/tree/main/api/).
+
 ## Testing
 
-Unittests for all components of the application are well written and documented, and are contained
+Unittests for all components of the application are being written and documented, and are contained
 in the directory [tests](https://github.com/chee-zaram/AirBnB_clone/tree/main/tests)
-at the root of the repository.
+at the root of the repository. A lot of help is currently needed to test all functionality.
 
 You can run tests for all components of the application by using the following
 command from the root of the project repository:
