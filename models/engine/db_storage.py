@@ -97,3 +97,17 @@ class DBStorage:
     def close(self):
         """Closes the database session"""
         self.__session.remove()
+
+    def get(self, cls, id):
+        """Gets an object of type `cls` with given `id` in database storage"""
+        if cls not in self.classes and cls not in self.classes.values():
+            raise TypeError("{} is not a valid class".format(cls))
+
+        if type(id) != str:
+            raise TypeError("{} must be a string".format(id))
+
+        if type(cls) == str:
+            cls = self.classes[cls]
+
+        return next((obj for obj in self.all(cls).values() if obj.id == id),
+                    None)
