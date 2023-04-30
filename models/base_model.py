@@ -47,10 +47,12 @@ class BaseModel:
                 kwargs['id'] = str(uuid4())
                 kwargs['created_at'] = datetime.utcnow()
                 kwargs['updated_at'] = datetime.utcnow()
-                self.__dict__.update(kwargs)
+                for name, value in kwargs.items():
+                    setattr(self, name, value)
             else:
                 dict_obj = BaseModel.from_dict(kwargs)
-                self.__dict__.update(dict_obj)
+                for name, value in dict_obj.items():
+                    setattr(self, name, value)
         else:
             self.id = str(uuid4())
             self.created_at = self.updated_at = datetime.utcnow()
