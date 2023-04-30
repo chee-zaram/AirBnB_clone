@@ -111,3 +111,17 @@ class DBStorage:
 
         return next((obj for obj in self.all(cls).values() if obj.id == id),
                     None)
+
+    def count(self, cls=None):
+        """Gets the number of objects of type `cls` in database storage"""
+
+        if cls is None:
+            return len(list(self.all().values()))
+
+        if cls not in self.classes and cls not in self.classes.values():
+            raise TypeError("{} is not a valid class".format(cls))
+
+        if type(cls) == str:
+            cls = self.classes[cls]
+
+        return len(list(self.all(cls).values()))
