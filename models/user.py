@@ -7,7 +7,7 @@ from models.base_model import BaseModel, Base
 from models import storage_type
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
-from hashlib import md5
+import bcrypt
 
 
 class User(BaseModel, Base):
@@ -34,7 +34,7 @@ class User(BaseModel, Base):
         email = password = first_name = last_name = ""
 
     def __setattr__(self, name, value):
-        """Magic method to capture and hash passwords with md5"""
+        """Magic method to capture and hash passwords with bcrypt"""
         if name == "password":
-            value = md5(value.encode()).hexdigest()
+            value = bcrypt.hashpw(value.encode(), bcrypt.gensalt()).decode()
         super(User, self).__setattr__(name, value)
