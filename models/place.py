@@ -41,12 +41,14 @@ class Place(BaseModel, Base):
         amenity_ids (list): List of strings of <Amenity.id>
     """
 
-    __tablename__ = "places"
     if storage_type == "db":
+        __tablename__ = "places"
         city_id = Column(String(60), ForeignKey(
-            'cities.id', ondelete='CASCADE'), nullable=False)
+            'cities.id', ondelete='CASCADE', onupdate='CASCADE'),
+            nullable=False)
         user_id = Column(String(60), ForeignKey(
-            'users.id', ondelete='CASCADE'), nullable=False)
+            'users.id', ondelete='CASCADE', onupdate='CASCADE'),
+            nullable=False)
         name = Column(String(60), nullable=False)
         description = Column(String(1024), nullable=True)
         number_rooms = Column(Integer, nullable=False, default=0)

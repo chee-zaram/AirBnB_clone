@@ -15,10 +15,11 @@ class City(BaseModel, Base):
         name (str): Name of the city
     """
 
-    __tablename__ = "cities"
     if storage_type == "db":
+        __tablename__ = "cities"
         state_id = Column(String(60), ForeignKey(
-            'states.id', ondelete='CASCADE'), nullable=False)
+            'states.id', ondelete='CASCADE', onupdate='CASCADE'),
+            nullable=False)
         name = Column(String(60), nullable=False)
         places = relationship("Place", backref="cities",
                               cascade="all, delete, delete-orphan")

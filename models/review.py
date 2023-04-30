@@ -14,13 +14,15 @@ class Review(BaseModel, Base):
         user_id (str): This stores the <User.id>
         text (str): This is the review text
     """
-    __tablename__ = "reviews"
 
     if storage_type == "db":
+        __tablename__ = "reviews"
         place_id = Column(String(60), ForeignKey(
-            "places.id", ondelete='CASCADE'), nullable=False)
+            "places.id", ondelete='CASCADE', onupdate='CASCADE'),
+            nullable=False)
         user_id = Column(String(60), ForeignKey(
-            "users.id", ondelete='CASCADE'), nullable=False)
+            "users.id", ondelete='CASCADE', onupdate='CASCADE'),
+            nullable=False)
         text = Column(String(1024), nullable=False)
 
     else:

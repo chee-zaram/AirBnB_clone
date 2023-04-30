@@ -9,8 +9,13 @@ from uuid import uuid4
 from datetime import datetime
 from sqlalchemy.orm import declarative_base
 from sqlalchemy import Column, String, DateTime
+from os import getenv
 
-Base = declarative_base()
+storage_type = getenv("HBNB_TYPE_STORAGE")
+if storage_type == "db":
+    Base = declarative_base()
+else:
+    Base = object
 
 
 @dataclass(unsafe_hash=True)
@@ -20,9 +25,12 @@ class BaseModel:
     It defines all common attributes/methods for other classes
     """
 
-    id = Column(String(60), primary_key=True, nullable=False)
-    created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
-    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
+    if storage_type == "db":
+        id = Column(String(60), primary_key=True, nullable=False)
+        created_at = Column(DateTime, nullable=False,
+                            default=datetime.utcnow())
+        updated_at = Column(DateTime, nullable=False,
+                            default=datetime.utcnow())
 
     def __init__(self, *args, **kwargs):
         """Runs only once when a new instance is created
