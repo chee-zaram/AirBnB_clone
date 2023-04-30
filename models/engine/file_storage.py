@@ -45,7 +45,7 @@ class FileStorage:
         """Serializes dictionary of objects to the JSON file"""
 
         with open(FileStorage.__file_path, "w") as file:
-            json.dump({key: obj.to_dict()
+            json.dump({key: obj.to_dict(to_save=True)
                       for key, obj in FileStorage.__objects.items()},
                       file, indent=2)
 

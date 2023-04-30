@@ -64,7 +64,7 @@ class BaseModel:
         storage.new(self)
         storage.save()
 
-    def to_dict(self):
+    def to_dict(self, to_save=False):
         """Returns a `dict` of all key/value pairs of the given instance"""
 
         dict_obj = self.__dict__.copy()
@@ -73,6 +73,9 @@ class BaseModel:
         dict_obj["__class__"] = self.__class__.__name__
         dict_obj["created_at"] = self.created_at.isoformat()
         dict_obj["updated_at"] = self.updated_at.isoformat()
+
+        if not to_save and dict_obj["__class__"] == "User":
+            del dict_obj["password"]
 
         return dict_obj
 
