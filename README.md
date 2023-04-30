@@ -32,6 +32,17 @@ web application](https://github.com/chee-zaram/AirBnB_clone/tree/main/api) used 
 - [Flask](https://flask.palletsprojects.com/)
 - [Bcrypt](https://pypi.org/project/bcrypt/)
 
+## Environment Variables
+
+- `HBNB_TYPE_STORAGE`: The storage type (`db` or `fs`)
+- `HBNB_MYSQL_HOST`: Host that MySQL is running on
+- `HBNB_MYSQL_PORT`: Port for MySQL to listen on
+- `HBNB_MYSQL_USER`: The MySQL user
+- `HBNB_MYSQL_PWD`: The password for `HBNB_MYSQL_USER`
+- `HBNB_MYSQL_DB`: The MySQL database name
+- `HBNB_API_HOST`: Host for API to run on
+- `HBNB_API_PORT`: Port for the API web server to listen on.
+
 ## Getting Started
 
 Clone this git repository. If you are a GNU/Linux user, you could copy and paste the
@@ -53,10 +64,16 @@ aspects of the system, such as creating and managing listings, managing bookings
 ### Starting the Command Interpreter
 
 To start the command interpreter, navigate to the root of the project if not already there
-and run the following command:
+and run the following command if using file storage:
 
 ```sh
 ./console.py
+```
+
+or, with database storage, for example:
+
+```sh
+HBNB_MYSQL_USER=hbnb_dev HBNB_MYSQL_PWD=hbnb_dev_pwd HBNB_MYSQL_HOST=localhost HBNB_MYSQL_DB=hbnb_dev_db HBNB_TYPE_STORAGE=db ./console.py
 ```
 
 This will start the command interpreter and you will be presented with a prompt,
@@ -180,6 +197,12 @@ written in HTML and CSS. Details on this can be found [here](https://github.com/
 This is a web application which runs and manages the AirBnB clone API. It is a fully functional
 RESTful API, allowing you to create, read, update, and delete instances of the AirBnB clone. Implementation of
 the API can be found [here](https://github.com/chee-zaram/AirBnB_clone/tree/main/api/).
+
+To start the API web server:
+
+```sh
+HBNB_MYSQL_USER=hbnb_dev HBNB_MYSQL_PWD=hbnb_dev_pwd HBNB_MYSQL_HOST=localhost HBNB_MYSQL_DB=hbnb_dev_db HBNB_TYPE_STORAGE=db HBNB_API_HOST=0.0.0.0 HBNB_API_PORT=5000 python3 -m api.v1.app --debug
+```
 
 ## Testing
 
