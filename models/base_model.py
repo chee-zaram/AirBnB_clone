@@ -45,15 +45,15 @@ class BaseModel:
         if kwargs:
             if 'id' not in kwargs:
                 kwargs['id'] = str(uuid4())
-                kwargs['created_at'] = datetime.now()
-                kwargs['updated_at'] = datetime.now()
+                kwargs['created_at'] = datetime.utcnow()
+                kwargs['updated_at'] = datetime.utcnow()
                 self.__dict__.update(kwargs)
             else:
                 dict_obj = BaseModel.from_dict(kwargs)
                 self.__dict__.update(dict_obj)
         else:
             self.id = str(uuid4())
-            self.created_at = self.updated_at = datetime.now()
+            self.created_at = self.updated_at = datetime.utcnow()
 
     def __str__(self):
         """Prints out a string representation of the class instance"""
@@ -68,7 +68,7 @@ class BaseModel:
         """
         from models import storage
 
-        self.updated_at = datetime.now()
+        self.updated_at = datetime.utcnow()
         storage.new(self)
         storage.save()
 
