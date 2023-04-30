@@ -15,9 +15,15 @@ class FileStorage:
         path.realpath(__file__)), "file_database.json")
     __objects = {}
 
-    def all(self):
+    def all(self, cls=None):
         """Returns the dictionary object"""
-        return FileStorage.__objects
+
+        if not cls:
+            return self.__objects
+
+        return {key: obj
+                for key, obj in self.__objects.items()
+                if type(obj) == cls}
 
     def new(self, obj):
         """Sets in the dictionary `obj` with key `<obj class name>.id`
@@ -39,7 +45,7 @@ class FileStorage:
         """Serializes dictionary of objects to the JSON file"""
 
         with open(FileStorage.__file_path, "w") as file:
-            json.dump({key: obj.to_dict()
+            json.dump({key: obj.to_dict(to_save=True)
                       for key, obj in FileStorage.__objects.items()},
                       file, indent=2)
 
@@ -56,6 +62,31 @@ class FileStorage:
                     **value) for key, value in data.items()}
         except FileNotFoundError:
             pass
+
+    def delete(self, obj=None):
+        """Deletes `obj` from `objects` dictionary
+
+        Arguments:
+            obj (instance): instance of a class to delete
+        """
+        from models.base_model import BaseModel
+
+        if not obj:
+            return
+
+        if not isinstance(obj, BaseModel):
+            raise TypeError(f"{obj} must be an instance of BaseModel")
+
+        try:
+            key = f"{obj.__class__.__name__}.{obj.id}"
+            del FileStorage.__objects[key]
+            FileStorage.save(self)
+        except KeyError:
+            pass
+
+    def close(self):
+        """Calls reload method to serialize JSON objects"""
+        self.reload()
 
     @property
     def classes(self):
@@ -78,3 +109,31 @@ class FileStorage:
             "Amenity": Amenity,
             "Review": Review,
         }
+
+    def get(self, cls, id):
+        """Gets an object of type `cls` with given `id` in file storage"""
+        if cls not in self.classes and cls not in self.classes.values():
+            raise TypeError("{} is not a valid class".format(cls))
+
+        if type(id) != str:
+            raise TypeError("{} must be a string".format(id))
+
+        if type(cls) == str:
+            cls = self.classes[cls]
+
+        return next((obj for obj in self.all(cls).values() if obj.id == id),
+                    None)
+
+    def count(self, cls=None):
+        """Gets the number of objects of type `cls` in file storage"""
+
+        if cls is None:
+            return len(list(self.all().values()))
+
+        if cls not in self.classes and cls not in self.classes.values():
+            raise TypeError("{} is not a valid class".format(cls))
+
+        if type(cls) == str:
+            cls = self.classes[cls]
+
+        return len(list(self.all(cls).values()))

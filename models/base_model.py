@@ -7,7 +7,15 @@ It contains the class `BaseModel`
 from dataclasses import dataclass
 from uuid import uuid4
 from datetime import datetime
-from models import storage
+from sqlalchemy.orm import declarative_base
+from sqlalchemy import Column, String, DateTime
+from os import getenv
+
+storage_type = getenv("HBNB_TYPE_STORAGE")
+if storage_type == "db":
+    Base = declarative_base()
+else:
+    Base = object
 
 
 @dataclass(unsafe_hash=True)
@@ -16,6 +24,13 @@ class BaseModel:
 
     It defines all common attributes/methods for other classes
     """
+
+    if storage_type == "db":
+        id = Column(String(60), primary_key=True, nullable=False)
+        created_at = Column(DateTime, nullable=False,
+                            default=datetime.utcnow())
+        updated_at = Column(DateTime, nullable=False,
+                            default=datetime.utcnow())
 
     def __init__(self, *args, **kwargs):
         """Runs only once when a new instance is created
@@ -28,19 +43,19 @@ class BaseModel:
         """
 
         if kwargs:
-            # Here, if an attribute name we are interested is in kwargs, we use
-            # the value to set our instance attribute
-            # If it is not, we generate the value of our instance attribute
-
-            dict_obj = BaseModel.from_dict(kwargs)
-            for key, value in dict_obj.items():
-                setattr(self, key, value)
+            if 'id' not in kwargs:
+                kwargs['id'] = str(uuid4())
+                kwargs['created_at'] = datetime.utcnow()
+                kwargs['updated_at'] = datetime.utcnow()
+                for name, value in kwargs.items():
+                    setattr(self, name, value)
+            else:
+                dict_obj = BaseModel.from_dict(kwargs)
+                for name, value in dict_obj.items():
+                    setattr(self, name, value)
         else:
             self.id = str(uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = datetime.now()
-            storage.new(self)
-        # super().__init__()
+            self.created_at = self.updated_at = datetime.utcnow()
 
     def __str__(self):
         """Prints out a string representation of the class instance"""
@@ -53,19 +68,31 @@ class BaseModel:
 
         This attributes is updated with the current datetime
         """
+        from models import storage
 
-        self.updated_at = datetime.now()
+        self.updated_at = datetime.utcnow()
+        storage.new(self)
         storage.save()
 
-    def to_dict(self):
+    def to_dict(self, to_save=False):
         """Returns a `dict` of all key/value pairs of the given instance"""
 
         dict_obj = self.__dict__.copy()
+        if "_sa_instance_state" in dict_obj:
+            del dict_obj["_sa_instance_state"]
         dict_obj["__class__"] = self.__class__.__name__
         dict_obj["created_at"] = self.created_at.isoformat()
         dict_obj["updated_at"] = self.updated_at.isoformat()
 
+        if not to_save and dict_obj["__class__"] == "User":
+            del dict_obj["password"]
+
         return dict_obj
+
+    def delete(self):
+        """Delete instance from storage."""
+        from models import storage
+        storage.delete(self)
 
     @staticmethod
     def from_dict(dict_obj):

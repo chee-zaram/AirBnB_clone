@@ -4,7 +4,8 @@
 It contains the entry point of the command interpreter
 """
 
-from models import storage
+from models import storage, storage_type
+from models.engine.file_storage import FileStorage
 import cmd
 import re
 import json
@@ -20,11 +21,12 @@ class HBNBCommand(cmd.Cmd):
     """
 
     prompt = "(hbnb) "
-    # intro = "-------------Welcome to hbnb!-------------\n" + \
-    #         "Enter \"help\" or \"?\" to get started\n"
+    intro = "-------------Welcome to hbnb!-------------\n" + \
+            "Enter \"help\" or \"?\" to get started\n"
 
-    __classes = storage.classes
+    __classes = FileStorage().classes
     __cmds = ["all", "create", "update", "destroy", "show", "count"]
+    __protected = ["id", "created_at", "updated_at"]
 
     def precmd(self, line):
         """Runs before the command line input is evaluated
@@ -194,12 +196,49 @@ class HBNBCommand(cmd.Cmd):
 
         if not arg:
             print("** class name missing **")
-        elif arg not in HBNBCommand.__classes:
+            return
+
+        args = arg.split()
+        classname = args[0]
+        if classname not in HBNBCommand.__classes:
             print("** class doesn't exist **")
-        else:
-            new_model = HBNBCommand.__classes[arg]()
-            new_model.save()
-            print(new_model.id)
+            return
+
+        attrs = {}
+        for arg in args[1:]:
+            # find a quote/unquote string, a float, or an integer
+            match = re.match(r'^([\w]+)=(\".*?\"|\d+\.\d+|\d+)$', arg)
+
+            # invalid arguments should be skipped
+            if not match:
+                continue
+
+            key, value = match.groups()
+            if key in HBNBCommand.__protected:
+                print("** cannot set {} manually".format(key))
+                continue
+
+            if value.startswith('"'):
+                # string values will contain underscore instead of spaces and
+                #  should be replaced appriopriately
+                value = value[1:].replace('_', ' ')
+
+                # if lines end with backslash then user needs more space
+                while value.endswith('\\'):
+                    value = value[:-1] + ' ' + input().strip()
+
+                # all escaped double quotes within the value should be replaced
+                value = value[:-1].replace('\\"', '"')
+            elif '.' in value:
+                value = float(value)
+            else:
+                value = int(value)
+
+            attrs[key] = value
+
+        instance = HBNBCommand.__classes[classname](**attrs)
+        instance.save()
+        print(instance.id)
 
     def do_show(self, arg):
         """Prints the string representation of an instance based on class & id
@@ -243,7 +282,11 @@ class HBNBCommand(cmd.Cmd):
             try:
                 obj_dict = storage.all()
                 obj_key = "{}.{}".format(args[0], args[1])
-                del obj_dict[obj_key]
+                obj = obj_dict[obj_key]
+                if storage_type != "db":
+                    del obj_dict[obj_key]
+                else:
+                    storage.delete(obj)
                 storage.save()
             except KeyError:
                 print("** no instance found **")
@@ -301,8 +344,8 @@ class HBNBCommand(cmd.Cmd):
             return
 
         attr_name = args[2]
-        if attr_name in ["id", "created_at", "updated_at"]:
-            print("** cannot update this attribute **")
+        if attr_name in HBNBCommand.__protected:
+            print("** cannot update {} attribute **".format(attr_name))
             return
 
         if len(args) == 3:
