@@ -19,9 +19,6 @@ def create_app(config_name):
     # set up cors
     CORS(app, resources={r"/api/v1/*": {"origins": HBNB_API_HOST}})
 
-    # set pretty print
-    app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
-
     # set configs if available
     if config_name is not None:
         app.config.from_object(config_name)
@@ -45,4 +42,5 @@ def create_app(config_name):
 if __name__ == "__main__":
     """Start of application"""
     app = create_app(None)
-    app.run(host=HBNB_API_HOST, port=HBNB_API_PORT, threaded=True)
+    app.run(host=HBNB_API_HOST, port=HBNB_API_PORT,
+            threaded=True, debug=True, use_evalex=False)
