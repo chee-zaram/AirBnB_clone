@@ -4,11 +4,11 @@
 It contains the entry point of the command interpreter
 """
 
-from models import storage, storage_type
-from models.engine.file_storage import FileStorage
 import cmd
 import re
 import json
+from models import storage, storage_type
+from models.engine.file_storage import FileStorage
 
 
 class HBNBCommand(cmd.Cmd):
